@@ -36,12 +36,12 @@ class PeopleViewController: UIViewController {
         self.title = currentUser.userName
     }
     
-    deinit {
-        usersListener?.remove()
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        usersListener?.remove()
     }
     
     override func viewDidLoad() {
@@ -140,7 +140,7 @@ private extension PeopleViewController {
                 fatalError("Unknown section kind")
             }
             let items = self.dataSource.snapshot().itemIdentifiers(inSection: .users)
-            sectionHeader.configure(text: section.description(usersCount: items.count), font: .systemFont(ofSize: 36, weight: .light), textColor: .label)
+            sectionHeader.configure(text: section.description(usersCount: items.count), font: .systemFont(ofSize: 28, weight: .light), textColor: .label)
             
             return sectionHeader
         }

@@ -13,7 +13,7 @@ class LoginViewController: UIViewController {
     let welcomeLabel = UILabel(text: "Welcome back!", font: .avenir26)
     
     let loginWithLabel = UILabel(text: "Login with")
-    let googleButton = UIButton(title: "Google", titleColor: .black, backgroundColor: .white, isShadow: true)
+    let googleButton = UIButton(title: "Google", titleColor: .black, backgroundColor: .white, imageName: "googleLogo", isShadow: true)
 
     let orLabel = UILabel(text: "or")
     
@@ -41,8 +41,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        
-        googleButton.customizeGoogleButton()
         
         setupConstraints()
         

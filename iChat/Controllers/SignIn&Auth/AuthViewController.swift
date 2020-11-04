@@ -13,7 +13,7 @@ class AuthViewController: UIViewController {
     let logoImageView = UIImageView(image: UIImage(named: "Logo"), contentMode: .scaleAspectFit)
     
     let googleLabel = UILabel(text: "Get started with")
-    let googleButton = UIButton(title: "Google", titleColor: .black, backgroundColor: .white, isShadow: true)
+    let googleButton = UIButton(title: "Google", titleColor: .black, backgroundColor: .white, imageName: "googleLogo", isShadow: true)
 
     let emailLabel = UILabel(text: "Or sign up with")
     let emailButton = UIButton(title: "Email", titleColor: .white, backgroundColor: .buttonDark)
@@ -29,8 +29,6 @@ class AuthViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        
-        googleButton.customizeGoogleButton()
         
         setupConstraints()
         
