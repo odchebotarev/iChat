@@ -41,6 +41,7 @@
 		9A3AD4972538EEC500636AD1 /* SetupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3AD4962538EEC500636AD1 /* SetupProfileViewController.swift */; };
 		9A3AD49A2538F16100636AD1 /* AddPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3AD4992538F16100636AD1 /* AddPhotoView.swift */; };
 		9A3AD49D2538F81700636AD1 /* UISegmentedControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3AD49C2538F81700636AD1 /* UISegmentedControl+Extension.swift */; };
+		9A480B3C25536CB8000FF3D0 /* FirestoreCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480B3B25536CB8000FF3D0 /* FirestoreCollections.swift */; };
 		9A63FDDE25458DF50077A8CF /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A63FDDD25458DF50077A8CF /* ChatViewController.swift */; };
 		9A6AB0F6253876AD0045C454 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AB0F5253876AD0045C454 /* AppDelegate.swift */; };
 		9A6AB0F8253876AD0045C454 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AB0F7253876AD0045C454 /* SceneDelegate.swift */; };
@@ -93,6 +94,7 @@
 		9A3AD4962538EEC500636AD1 /* SetupProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileViewController.swift; sourceTree = "<group>"; };
 		9A3AD4992538F16100636AD1 /* AddPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoView.swift; sourceTree = "<group>"; };
 		9A3AD49C2538F81700636AD1 /* UISegmentedControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentedControl+Extension.swift"; sourceTree = "<group>"; };
+		9A480B3B25536CB8000FF3D0 /* FirestoreCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreCollections.swift; sourceTree = "<group>"; };
 		9A63FDDD25458DF50077A8CF /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		9A6AB0F2253876AD0045C454 /* iChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A6AB0F5253876AD0045C454 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				9A0C9979253F8BF2001FFDAF /* AuthError.swift */,
 				9ACD6B362540DEA5001C4568 /* UserError.swift */,
 				9A0C9976253F89E0001FFDAF /* Validator.swift */,
+				9A480B3B25536CB8000FF3D0 /* FirestoreCollections.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				9A31005A253CDE9600491437 /* InsertableTextField.swift in Sources */,
 				9A3AD48E2538BC4400636AD1 /* SignUpViewController.swift in Sources */,
 				9AF795FC2539FDEF00FEBC93 /* PeopleViewController.swift in Sources */,
+				9A480B3C25536CB8000FF3D0 /* FirestoreCollections.swift in Sources */,
 				9A0CA8C425443BF100198E8C /* UIImage+Extension.swift in Sources */,
 				9A310057253CB3BF00491437 /* ProfileViewController.swift in Sources */,
 				9A6AB0FA253876AD0045C454 /* AuthViewController.swift in Sources */,

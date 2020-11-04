@@ -13,13 +13,22 @@ class AuthViewController: UIViewController {
     let logoImageView = UIImageView(image: UIImage(named: "Logo"), contentMode: .scaleAspectFit)
     
     let googleLabel = UILabel(text: "Get started with")
-    let googleButton = UIButton(title: "Google", titleColor: .black, backgroundColor: .white, imageName: "googleLogo", isShadow: true)
+    let googleButton = UIButton(title: "Google",
+                                titleColor: .black,
+                                backgroundColor: .white,
+                                imageName: "googleLogo",
+                                isShadow: true)
 
     let emailLabel = UILabel(text: "Or sign up with")
-    let emailButton = UIButton(title: "Email", titleColor: .white, backgroundColor: .buttonDark)
+    let emailButton = UIButton(title: "Email",
+                               titleColor: .white,
+                               backgroundColor: .buttonDark)
 
     let alreadyOnBoardLabel = UILabel(text: "Already onboard?")
-    let loginButton = UIButton(title: "Login", titleColor: .buttonRed, backgroundColor: .white, isShadow: true)
+    let loginButton = UIButton(title: "Login",
+                               titleColor: .buttonRed,
+                               backgroundColor: .white,
+                               isShadow: true)
     
     let signUpVC = SignUpViewController()
     let loginVC = LoginViewController()
