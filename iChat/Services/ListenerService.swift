@@ -15,7 +15,7 @@ class ListenerService {
     
     private let db = Firestore.firestore()
     
-    private var usersRef: CollectionReference {
+    private var usersReference: CollectionReference {
         return db.collection(FirestoreCollection.users.rawValue)
     }
     
@@ -25,7 +25,7 @@ class ListenerService {
     
     func usersObserve(users: [MUser], completion: @escaping (Result<[MUser], Error>) -> Void) -> ListenerRegistration {
         var users = users
-        let usersListener = usersRef.addSnapshotListener { (querySnapshot, error) in
+        let usersListener = usersReference.addSnapshotListener { (querySnapshot, error) in
             guard error == nil, let snapshot = querySnapshot else {
                 completion(.failure(error!))
                 return
@@ -55,8 +55,8 @@ class ListenerService {
     func waitingChatsObserve(chats: [MChat], completion: @escaping (Result<[MChat], Error>) -> Void) -> ListenerRegistration {
         
         var chats = chats
-        let chatsRef = db.collection([FirestoreCollection.users.rawValue, currentUserId, UserCollection.waitingChats.rawValue].joined(separator: "/"))
-        let chatsListener = chatsRef.addSnapshotListener { (querySnapshot, error) in
+        let chatsReference = db.collection([FirestoreCollection.users.rawValue, currentUserId, UserCollection.waitingChats.rawValue].joined(separator: "/"))
+        let chatsListener = chatsReference.addSnapshotListener { (querySnapshot, error) in
             guard let snapshot = querySnapshot else {
                 completion(.failure(error!))
                 return
@@ -87,8 +87,8 @@ class ListenerService {
     func activeChatsObserve(chats: [MChat], completion: @escaping (Result<[MChat], Error>) -> Void) -> ListenerRegistration {
         
         var chats = chats
-        let chatsRef = db.collection([FirestoreCollection.users.rawValue, currentUserId, UserCollection.activeChats.rawValue].joined(separator: "/"))
-        let chatsListener = chatsRef.addSnapshotListener { (querySnapshot, error) in
+        let chatsReference = db.collection([FirestoreCollection.users.rawValue, currentUserId, UserCollection.activeChats.rawValue].joined(separator: "/"))
+        let chatsListener = chatsReference.addSnapshotListener { (querySnapshot, error) in
             guard let snapshot = querySnapshot else {
                 completion(.failure(error!))
                 return
@@ -118,7 +118,11 @@ class ListenerService {
     
     func messagesObserve(chat: MChat, completion: @escaping (Result<MMessage, Error>) -> Void) -> ListenerRegistration? {
         
-        let reference = usersRef.document(currentUserId).collection(UserCollection.activeChats.rawValue).document(chat.friendId).collection(ChatCollection.messages.rawValue)
+        let reference = usersReference
+            .document(currentUserId)
+            .collection(UserCollection.activeChats.rawValue)
+            .document(chat.friendId)
+            .collection(ChatCollection.messages.rawValue)
         let messagesListener = reference.addSnapshotListener { (querySnapshot, error) in
             guard error == nil else {
                 completion(.failure(error!))

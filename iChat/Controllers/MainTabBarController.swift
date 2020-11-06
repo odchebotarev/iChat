@@ -11,7 +11,7 @@ class MainTabBarController: UITabBarController {
     
     private let currentUser: MUser
     
-    init(currentUser: MUser = MUser(userName: "", email: "", avatarStringURL: "", description: "", sex: "", id: "")) {
+    init(currentUser: MUser) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
     }
@@ -25,7 +25,7 @@ class MainTabBarController: UITabBarController {
         
         self.tabBar.tintColor = .violet
         
-        let listViewController = ListViewController(currentUser: currentUser)
+        let listViewController = ConversationsViewController(currentUser: currentUser)
         let peopleViewController = PeopleViewController(currentUser: currentUser)
         
         let boldConfig = UIImage.SymbolConfiguration(weight: .medium)

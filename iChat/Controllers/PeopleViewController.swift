@@ -107,7 +107,7 @@ class PeopleViewController: UIViewController {
     
     private func reloadData(with searchText: String?) {
         
-        let filtered = users.filter { $0.contains(filter: searchText) }
+        let filtered = users.filter { $0.contains(substring: searchText) }
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, MUser>()
         snapshot.appendSections([.users])

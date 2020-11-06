@@ -14,35 +14,47 @@ class StorageService {
     static let shared = StorageService()
     private init() {}
     
-    let storageRef = Storage.storage().reference()
+    private let storageReference = Storage.storage().reference()
     
-    private var avatarsRef: StorageReference {
-        return storageRef.child("avatars")
+    private var avatarsReference: StorageReference {
+        return storageReference.child(StorageChild.avatars.rawValue)
     }
     
-    private var chatsRef: StorageReference {
-        return storageRef.child("chats")
+    private var chatsReference: StorageReference {
+        return storageReference.child(StorageChild.chats.rawValue)
     }
     
-    private var currentUserId: String {
-        return Auth.auth().currentUser!.uid
+    private var currentUserId: String? {
+        return Auth.auth().currentUser?.uid
     }
+    
+    private let contentType = "image/jpeg"
     
     func upload(photo: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+        
+        guard let currentUserId = currentUserId else {
+            completion(.failure(UploadError.noCurrentUserId))
+            return
+        }
         
         guard let scaledImage = photo.scaledToSafeUploadSize,
               let imageData = scaledImage.jpegData(compressionQuality: 0.4) else { return }
         
         let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
+        metadata.contentType = self.contentType
         
-        avatarsRef.child(currentUserId).putData(imageData, metadata: metadata) { (metadata, error) in
+        avatarsReference.child(currentUserId).putData(imageData, metadata: metadata) { (_, error) in
             if let error = error {
                 completion(.failure(error))
                 return
             }
             
-            self.avatarsRef.child(self.currentUserId).downloadURL { (url, error) in
+            guard let currentUserId = self.currentUserId else {
+                completion(.failure(UploadError.noCurrentUserId))
+                return
+            }
+            
+            self.avatarsReference.child(currentUserId).downloadURL { (url, error) in
                 guard let downloadURL = url else {
                     completion(.failure(error!))
                     return
@@ -59,18 +71,21 @@ class StorageService {
               let imageData = scaledImage.jpegData(compressionQuality: 0.4) else { return }
         
         let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
+        metadata.contentType = self.contentType
         
         let imageName = [UUID().uuidString, String(Date().timeIntervalSince1970)].joined()
-        let uid: String = Auth.auth().currentUser!.uid
+        guard let uid: String = currentUserId else {
+            completion(.failure(UploadError.noCurrentUserId))
+            return
+        }
         let chatName = [chat.friendUserName, uid].joined()
-        self.chatsRef.child(chatName).child(imageName).putData(imageData, metadata: metadata) { (metadata, error) in
-            guard let _ = metadata else {
+        self.chatsReference.child(chatName).child(imageName).putData(imageData, metadata: metadata) { (metadata, error) in
+            guard metadata != nil else {
                 completion(.failure(error!))
                 return
             }
             
-            self.chatsRef.child(chatName).child(imageName).downloadURL { (url, error) in
+            self.chatsReference.child(chatName).child(imageName).downloadURL { (url, error) in
                 guard let downloadURL = url else {
                     completion(.failure(error!))
                     return

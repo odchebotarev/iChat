@@ -1,5 +1,5 @@
 //
-//  FirestoreCollections.swift
+//  FirestoreCollection.swift
 //  iChat
 //
 //  Created by Oleg Chebotarev on 05.11.2020.

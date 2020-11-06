@@ -1,5 +1,5 @@
 //
-//  ListViewController.swift
+//  ConversationsViewController.swift
 //  iChat
 //
 //  Created by Oleg Chebotarev on 16.10.2020.
@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-class ListViewController: UIViewController {
+class ConversationsViewController: UIViewController {
     
     var waitingChats = [MChat]()
     var activeChats = [MChat]()
@@ -121,7 +121,7 @@ class ListViewController: UIViewController {
 }
 
 // MARK: - Data source
-private extension ListViewController {
+private extension ConversationsViewController {
     
     func createDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, MChat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
@@ -154,7 +154,7 @@ private extension ListViewController {
 }
 
 // MARK: - Setup layout
-private extension ListViewController {
+private extension ConversationsViewController {
     
     func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -232,7 +232,7 @@ private extension ListViewController {
 }
 
 // MARK: - UICollectionViewDelegate
-extension ListViewController: UICollectionViewDelegate {
+extension ConversationsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let chat = self.dataSource?.itemIdentifier(for: indexPath) else { return }
@@ -251,7 +251,7 @@ extension ListViewController: UICollectionViewDelegate {
     
 }
 // MARK: - WaitingChatsNavigation
-extension ListViewController: WaitingChatsNavigation {
+extension ConversationsViewController: WaitingChatsNavigation {
     
     func removeWaitingChat(chat: MChat) {
         FirestoreService.shared.delegateWaitingChat(chat: chat) { (result) in
@@ -278,7 +278,7 @@ extension ListViewController: WaitingChatsNavigation {
 }
 
 // MARK: - UISearchBarDelegate
-extension ListViewController: UISearchBarDelegate {
+extension ConversationsViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
     }

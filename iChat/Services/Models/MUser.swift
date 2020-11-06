@@ -67,7 +67,8 @@ struct MUser: Hashable, Decodable {
     }
     
     var representation: [String: Any] {
-        var rep = ["userName": userName]
+        var rep = [String : Any]()
+        rep["userName"] = userName
         rep["sex"] = sex
         rep["email"] = email
         rep["avatarStringURL"] = avatarStringURL
@@ -84,16 +85,16 @@ struct MUser: Hashable, Decodable {
         return lhs.id == rhs.id
     }
     
-    func contains(filter: String?) -> Bool {
-        guard let filter = filter else { return true }
+    func contains(substring: String?) -> Bool {
+        guard let substring = substring else { return true }
         
-        if filter.isEmpty { return true }
+        if substring.isEmpty { return true }
         
-        let lowercasedFilter = filter.lowercased()
-        return userName.lowercased().contains(lowercasedFilter)
+        return userName.lowercased().contains(substring.lowercased())
     }
 }
 
+// MARK: - SenderType
 extension MUser: SenderType {
     
     var senderId: String {
