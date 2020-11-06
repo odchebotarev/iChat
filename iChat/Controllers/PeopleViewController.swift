@@ -11,11 +11,11 @@ import FirebaseFirestore
 
 class PeopleViewController: UIViewController {
     
-    var users = [MUser]()
+    var users = [ChatUser]()
     private var usersListener: ListenerRegistration?
     
     var collectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, MUser>!
+    var dataSource: UICollectionViewDiffableDataSource<Section, ChatUser>!
     
     enum Section: Int, CaseIterable {
         case users
@@ -28,9 +28,9 @@ class PeopleViewController: UIViewController {
         }
     }
     
-    private let currentUser: MUser
+    private let currentUser: ChatUser
     
-    init(currentUser: MUser) {
+    init(currentUser: ChatUser) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
         self.title = currentUser.userName
@@ -109,7 +109,7 @@ class PeopleViewController: UIViewController {
         
         let filtered = users.filter { $0.contains(substring: searchText) }
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, MUser>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, ChatUser>()
         snapshot.appendSections([.users])
         snapshot.appendItems(filtered, toSection: .users)
         dataSource.apply(snapshot, animatingDifferences: true)
@@ -120,7 +120,7 @@ class PeopleViewController: UIViewController {
 // MARK: - Data source
 private extension PeopleViewController {
     func createDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, MUser>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, user) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, ChatUser>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, user) -> UICollectionViewCell? in
             guard let section = Section(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }

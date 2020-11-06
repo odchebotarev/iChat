@@ -6,6 +6,6 @@
 //
 
 protocol WaitingChatsNavigation: class {
-    func removeWaitingChat(chat: MChat)
-    func chatToActive(chat: MChat)
+    func removeWaitingChat(chat: Chat)
+    func chatToActive(chat: Chat)
 }

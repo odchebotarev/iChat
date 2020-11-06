@@ -1,5 +1,5 @@
 //
-//  MChat.swift
+//  Chat.swift
 //  iChat
 //
 //  Created by Oleg Chebotarev on 18.10.2020.
@@ -7,7 +7,7 @@
 
 import FirebaseFirestore
 
-struct MChat: Hashable, Decodable {
+struct Chat: Hashable, Decodable {
     
     var friendUserName: String
     var friendAvatarStringURL: String
@@ -51,7 +51,7 @@ struct MChat: Hashable, Decodable {
         hasher.combine(friendId)
     }
     
-    static func ==(lhs: MChat, rhs: MChat) -> Bool {
+    static func ==(lhs: Chat, rhs: Chat) -> Bool {
         return lhs.friendId == rhs.friendId
     }
 }

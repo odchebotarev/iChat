@@ -10,8 +10,8 @@ import FirebaseFirestore
 
 class ConversationsViewController: UIViewController {
     
-    var waitingChats = [MChat]()
-    var activeChats = [MChat]()
+    var waitingChats = [Chat]()
+    var activeChats = [Chat]()
     
     private var waitingChatsListener: ListenerRegistration?
     private var activeChatsListener: ListenerRegistration?
@@ -29,12 +29,12 @@ class ConversationsViewController: UIViewController {
         }
     }
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, MChat>?
+    var dataSource: UICollectionViewDiffableDataSource<Section, Chat>?
     var collectionView: UICollectionView!
     
-    private let currentUser: MUser
+    private let currentUser: ChatUser
     
-    init(currentUser: MUser) {
+    init(currentUser: ChatUser) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
         title = currentUser.userName
@@ -111,7 +111,7 @@ class ConversationsViewController: UIViewController {
     }
     
     private func reloadData() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, MChat>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Chat>()
         snapshot.appendSections([.waitingChats, .activeChats])
         snapshot.appendItems(waitingChats, toSection: .waitingChats)
         snapshot.appendItems(activeChats, toSection: .activeChats)
@@ -124,7 +124,7 @@ class ConversationsViewController: UIViewController {
 private extension ConversationsViewController {
     
     func createDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, MChat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, Chat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
             guard let section = Section(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }
@@ -253,7 +253,7 @@ extension ConversationsViewController: UICollectionViewDelegate {
 // MARK: - WaitingChatsNavigation
 extension ConversationsViewController: WaitingChatsNavigation {
     
-    func removeWaitingChat(chat: MChat) {
+    func removeWaitingChat(chat: Chat) {
         FirestoreService.shared.delegateWaitingChat(chat: chat) { (result) in
             switch result {
             case .success:
@@ -264,7 +264,7 @@ extension ConversationsViewController: WaitingChatsNavigation {
         }
     }
     
-    func chatToActive(chat: MChat) {
+    func chatToActive(chat: Chat) {
         FirestoreService.shared.changeToActive(chat: chat) { (result) in
             switch result {
             case .success:

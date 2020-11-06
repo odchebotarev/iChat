@@ -1,5 +1,5 @@
 //
-//  MUser.swift
+//  ChatUser.swift
 //  iChat
 //
 //  Created by Oleg Chebotarev on 18.10.2020.
@@ -8,7 +8,7 @@
 import FirebaseFirestore
 import MessageKit
 
-struct MUser: Hashable, Decodable {
+struct ChatUser: Hashable, Decodable {
     var userName: String
     var email: String
     var avatarStringURL: String
@@ -81,7 +81,7 @@ struct MUser: Hashable, Decodable {
         hasher.combine(id)
     }
     
-    static func ==(lhs: MUser, rhs: MUser) -> Bool {
+    static func ==(lhs: ChatUser, rhs: ChatUser) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -95,7 +95,7 @@ struct MUser: Hashable, Decodable {
 }
 
 // MARK: - SenderType
-extension MUser: SenderType {
+extension ChatUser: SenderType {
     
     var senderId: String {
         return self.id

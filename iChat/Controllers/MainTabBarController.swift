@@ -9,9 +9,9 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
     
-    private let currentUser: MUser
+    private let currentUser: ChatUser
     
-    init(currentUser: MUser) {
+    init(currentUser: ChatUser) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
     }

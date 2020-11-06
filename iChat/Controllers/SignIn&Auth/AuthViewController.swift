@@ -120,9 +120,9 @@ extension AuthViewController: GIDSignInDelegate {
             case .success(let user):
                 FirestoreService.shared.getUserData(user: user) { (result) in
                     switch result {
-                    case .success(let mUser):
+                    case .success(let chatUser):
                         UIApplication.getTopViewController()?.showAlert(with: "Success", and: "You have been authorized.") {
-                            let mainTabBarController = MainTabBarController(currentUser: mUser)
+                            let mainTabBarController = MainTabBarController(currentUser: chatUser)
                             mainTabBarController.modalPresentationStyle = .fullScreen
                             UIApplication.getTopViewController()?.present(mainTabBarController, animated: true, completion: nil)
                         }

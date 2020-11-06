@@ -65,7 +65,7 @@ class StorageService {
         }
     }
     
-    func uploadImageMessage(photo: UIImage, to chat: MChat, completion: @escaping (Result<URL, Error>) -> Void) {
+    func uploadImageMessage(photo: UIImage, to chat: Chat, completion: @escaping (Result<URL, Error>) -> Void) {
         
         guard let scaledImage = photo.scaledToSafeUploadSize,
               let imageData = scaledImage.jpegData(compressionQuality: 0.4) else { return }
