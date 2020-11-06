@@ -12,13 +12,13 @@ import FirebaseFirestore
 
 class ChatViewController: MessagesViewController {
     
-    private var messages = [MMessage]()
+    private var messages = [ChatMessage]()
     private var messageListener: ListenerRegistration?
     
     private let user: ChatUser
-    private let chat: MChat
+    private let chat: Chat
     
-    init(user: ChatUser, chat: MChat) {
+    init(user: ChatUser, chat: Chat) {
         self.user = user
         self.chat = chat
         super.init(nibName: nil, bundle: nil)
@@ -76,7 +76,7 @@ class ChatViewController: MessagesViewController {
         })
     }
     
-    private func insertNewMessage(message: MMessage) {
+    private func insertNewMessage(message: ChatMessage) {
         guard !messages.contains(message) else { return }
         messages.append(message)
         messages.sort()
@@ -109,7 +109,7 @@ class ChatViewController: MessagesViewController {
         StorageService.shared.uploadImageMessage(photo: image, to: chat) { (result) in
             switch result {
             case .success(let url):
-                var message = MMessage(user: self.user, image: image)
+                var message = ChatMessage(user: self.user, image: image)
                 message.downloadURL = url
                 FirestoreService.shared.sendMessage(chat: self.chat, message: message) { (result) in
                     switch result {
@@ -257,7 +257,7 @@ extension ChatViewController: MessagesDisplayDelegate {
 extension ChatViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-        let message = MMessage(user: user, content: text)
+        let message = ChatMessage(user: user, content: text)
         FirestoreService.shared.sendMessage(chat: chat, message: message) { (result) in
             switch result {
             case .success:

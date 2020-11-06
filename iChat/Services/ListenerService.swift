@@ -52,7 +52,7 @@ class ListenerService {
         return usersListener
     }
     
-    func waitingChatsObserve(chats: [MChat], completion: @escaping (Result<[MChat], Error>) -> Void) -> ListenerRegistration {
+    func waitingChatsObserve(chats: [Chat], completion: @escaping (Result<[Chat], Error>) -> Void) -> ListenerRegistration {
         
         var chats = chats
         let chatsReference = db.collection([FirestoreCollection.users.rawValue, currentUserId, UserCollection.waitingChats.rawValue].joined(separator: "/"))
@@ -63,7 +63,7 @@ class ListenerService {
             }
             
             snapshot.documentChanges.forEach { (diff) in
-                guard let chat = MChat(document: diff.document) else { return }
+                guard let chat = Chat(document: diff.document) else { return }
                 
                 switch diff.type {
                 case .added:
@@ -84,7 +84,7 @@ class ListenerService {
         return chatsListener
     }
     
-    func activeChatsObserve(chats: [MChat], completion: @escaping (Result<[MChat], Error>) -> Void) -> ListenerRegistration {
+    func activeChatsObserve(chats: [Chat], completion: @escaping (Result<[Chat], Error>) -> Void) -> ListenerRegistration {
         
         var chats = chats
         let chatsReference = db.collection([FirestoreCollection.users.rawValue, currentUserId, UserCollection.activeChats.rawValue].joined(separator: "/"))
@@ -95,7 +95,7 @@ class ListenerService {
             }
             
             snapshot.documentChanges.forEach { (diff) in
-                guard let chat = MChat(document: diff.document) else { return }
+                guard let chat = Chat(document: diff.document) else { return }
                 
                 switch diff.type {
                 case .added:
@@ -116,7 +116,7 @@ class ListenerService {
         return chatsListener
     }
     
-    func messagesObserve(chat: MChat, completion: @escaping (Result<MMessage, Error>) -> Void) -> ListenerRegistration? {
+    func messagesObserve(chat: Chat, completion: @escaping (Result<ChatMessage, Error>) -> Void) -> ListenerRegistration? {
         
         let reference = usersReference
             .document(currentUserId)
@@ -135,7 +135,7 @@ class ListenerService {
             }
             
             snapshot.documentChanges.forEach { (diff) in
-                guard let message = MMessage(document: diff.document) else { return }
+                guard let message = ChatMessage(document: diff.document) else { return }
                 switch diff.type {
                 case .added:
                     completion(.success(message))

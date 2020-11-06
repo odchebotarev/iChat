@@ -1,5 +1,5 @@
 //
-//  MMessage.swift
+//  ChatMessage.swift
 //  iChat
 //
 //  Created by Oleg Chebotarev on 24.10.2020.
@@ -9,14 +9,7 @@ import UIKit
 import FirebaseFirestore
 import MessageKit
 
-struct ImageItem: MediaItem {
-    var url: URL?
-    var image: UIImage?
-    var placeholderImage: UIImage
-    var size: CGSize
-}
-
-struct MMessage: Hashable, MessageType {
+struct ChatMessage: Hashable, MessageType {
     
     let content: String
     var sender: SenderType
@@ -96,15 +89,15 @@ struct MMessage: Hashable, MessageType {
         hasher.combine(messageId)
     }
     
-    static func == (lhs: MMessage, rhs: MMessage) -> Bool {
+    static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
         return lhs.messageId == rhs.messageId
     }
     
 }
 
-extension MMessage: Comparable {
+extension ChatMessage: Comparable {
     
-    static func < (lhs: MMessage, rhs: MMessage) -> Bool {
+    static func < (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
         return lhs.sentDate < rhs.sentDate
     }
     

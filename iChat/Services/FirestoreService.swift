@@ -103,8 +103,8 @@ class FirestoreService {
         ].joined(separator: "/"))
         let messageReference = reference.document(self.currentUser.id).collection(ChatCollection.messages.rawValue)
         
-        let message = MMessage(user: currentUser, content: message)
-        let chat = MChat(friendUserName: currentUser.userName, friendAvatarStringURL: currentUser.avatarStringURL, lastMessageContent: message.content, friendId: currentUser.id)
+        let message = ChatMessage(user: currentUser, content: message)
+        let chat = Chat(friendUserName: currentUser.userName, friendAvatarStringURL: currentUser.avatarStringURL, lastMessageContent: message.content, friendId: currentUser.id)
         
         reference.document(currentUser.id).setData(chat.representation) { (error) in
             if let error = error {
@@ -122,7 +122,7 @@ class FirestoreService {
         }
     }
     
-    func delegateWaitingChat(chat: MChat, completion: @escaping (Result<Void, Error>) -> Void) {
+    func delegateWaitingChat(chat: Chat, completion: @escaping (Result<Void, Error>) -> Void) {
         waitingChatsRef.document(chat.friendId).delete { (error) in
             if let error = error {
                 completion(.failure(error))
@@ -133,7 +133,7 @@ class FirestoreService {
         }
     }
     
-    func deleteMessages(chat: MChat, completion: @escaping (Result<Void, Error>) -> Void) {
+    func deleteMessages(chat: Chat, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let reference = waitingChatsRef.document(chat.friendId).collection(ChatCollection.messages.rawValue)
         
@@ -159,24 +159,24 @@ class FirestoreService {
         
     }
     
-    func getWaitingChatMessages(chat: MChat, completion: @escaping (Result<[MMessage], Error>) -> Void) {
+    func getWaitingChatMessages(chat: Chat, completion: @escaping (Result<[ChatMessage], Error>) -> Void) {
         
         let reference = waitingChatsRef.document(chat.friendId).collection(ChatCollection.messages.rawValue)
-        var messages = [MMessage]()
+        var messages = [ChatMessage]()
         reference.getDocuments { (querySnapshot, error) in
             if let error = error {
                 completion(.failure(error))
                 return
             }
             for document in querySnapshot?.documents ?? [] {
-                guard let message = MMessage(document: document) else { return }
+                guard let message = ChatMessage(document: document) else { return }
                 messages.append(message)
             }
             completion(.success(messages))
         }
     }
     
-    func changeToActive(chat: MChat, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeToActive(chat: Chat, completion: @escaping (Result<Void, Error>) -> Void) {
         getWaitingChatMessages(chat: chat) { (result) in
             switch result {
             case .success(let messages):
@@ -201,7 +201,7 @@ class FirestoreService {
         }
     }
     
-    func createActiveChat(chat: MChat, messages: [MMessage], completion: @escaping (Result<Void, Error>) -> Void) {
+    func createActiveChat(chat: Chat, messages: [ChatMessage], completion: @escaping (Result<Void, Error>) -> Void) {
         
         let messageReference = activeChatsRef.document(chat.friendId).collection(ChatCollection.messages.rawValue)
         
@@ -225,13 +225,13 @@ class FirestoreService {
         
     }
     
-    func sendMessage(chat: MChat, message: MMessage, completion: @escaping (Result<Void, Error>) -> Void) {
+    func sendMessage(chat: Chat, message: ChatMessage, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let friendReference = usersRef.document(chat.friendId).collection(UserCollection.activeChats.rawValue).document(currentUser.id)
         let friendMessageReference = friendReference.collection(ChatCollection.messages.rawValue)
         let myMessageReference = usersRef.document(currentUser.id).collection(UserCollection.activeChats.rawValue).document(chat.friendId).collection(ChatCollection.messages.rawValue)
         
-        let chatForFriend = MChat(friendUserName: currentUser.userName,
+        let chatForFriend = Chat(friendUserName: currentUser.userName,
                                   friendAvatarStringURL: currentUser.avatarStringURL,
                                   lastMessageContent: message.content,
                                   friendId: currentUser.id)

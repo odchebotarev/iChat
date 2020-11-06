@@ -18,9 +18,9 @@ class ChatRequestViewController: UIViewController {
     
     weak var delegate: WaitingChatsNavigation?
     
-    private var chat: MChat
+    private var chat: Chat
     
-    init(chat: MChat) {
+    init(chat: Chat) {
         self.chat = chat
         nameLabel.text = chat.friendUserName
         imageView.sd_setImage(with: URL(string: chat.friendAvatarStringURL), completed: nil)
