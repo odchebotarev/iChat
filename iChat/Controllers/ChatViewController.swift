@@ -15,10 +15,10 @@ class ChatViewController: MessagesViewController {
     private var messages = [MMessage]()
     private var messageListener: ListenerRegistration?
     
-    private let user: MUser
+    private let user: ChatUser
     private let chat: MChat
     
-    init(user: MUser, chat: MChat) {
+    init(user: ChatUser, chat: MChat) {
         self.user = user
         self.chat = chat
         super.init(nibName: nil, bundle: nil)

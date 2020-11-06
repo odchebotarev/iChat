@@ -57,8 +57,8 @@ class LoginViewController: UIViewController {
                 self.showAlert(with: "Success", and: "You have been authorized.") {
                     FirestoreService.shared.getUserData(user: user) { (result) in
                         switch result {
-                        case .success(let mUser):
-                            let mainTabBarController = MainTabBarController(currentUser: mUser)
+                        case .success(let chatUser):
+                            let mainTabBarController = MainTabBarController(currentUser: chatUser)
                             mainTabBarController.modalPresentationStyle = .fullScreen
                             self.present(mainTabBarController, animated: true, completion: nil)
                         case .failure(_):

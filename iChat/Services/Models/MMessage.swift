@@ -39,7 +39,7 @@ struct MMessage: Hashable, MessageType {
     var image: UIImage? = nil
     var downloadURL: URL? = nil
     
-    init(user: MUser, content: String) {
+    init(user: ChatUser, content: String) {
         self.content = content
 //        self.sender = Sender(senderId: user.id, displayName: user.userName)
         self.sender = user
@@ -47,7 +47,7 @@ struct MMessage: Hashable, MessageType {
         self.id = nil
     }
     
-    init(user: MUser, image: UIImage) {
+    init(user: ChatUser, image: UIImage) {
 //        self.sender = Sender(senderId: user.id, displayName: user.userName)
         self.sender = user
         self.image = image

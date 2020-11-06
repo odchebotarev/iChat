@@ -16,9 +16,9 @@ class ProfileViewController: UIViewController {
     let aboutMeLabel = UILabel(font: .systemFont(ofSize: 16, weight: .light))
     let myTextField = InsertableTextField()
     
-    private let user: MUser
+    private let user: ChatUser
     
-    init(user: MUser) {
+    init(user: ChatUser) {
         self.user = user
         self.nameLabel.text = user.userName
         self.aboutMeLabel.text = user.description

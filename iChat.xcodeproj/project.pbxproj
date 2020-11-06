@@ -27,7 +27,7 @@
 		9A310035253C619400491437 /* WaitingChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A310034253C619400491437 /* WaitingChatCell.swift */; };
 		9A310039253C630B00491437 /* SelfConfiguringCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A310038253C630B00491437 /* SelfConfiguringCell.swift */; };
 		9A31003F253C67D700491437 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A31003E253C67D700491437 /* SectionHeader.swift */; };
-		9A310047253C84BA00491437 /* MUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A310046253C84BA00491437 /* MUser.swift */; };
+		9A310047253C84BA00491437 /* ChatUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A310046253C84BA00491437 /* ChatUser.swift */; };
 		9A31004A253C84C800491437 /* MChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A310049253C84C800491437 /* MChat.swift */; };
 		9A31004F253CA36C00491437 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A31004E253CA36C00491437 /* UserCell.swift */; };
 		9A310052253CA5EA00491437 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A310051253CA5EA00491437 /* UIViewController+Extension.swift */; };
@@ -82,7 +82,7 @@
 		9A310034253C619400491437 /* WaitingChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatCell.swift; sourceTree = "<group>"; };
 		9A310038253C630B00491437 /* SelfConfiguringCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfConfiguringCell.swift; sourceTree = "<group>"; };
 		9A31003E253C67D700491437 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
-		9A310046253C84BA00491437 /* MUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MUser.swift; sourceTree = "<group>"; };
+		9A310046253C84BA00491437 /* ChatUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUser.swift; sourceTree = "<group>"; };
 		9A310049253C84C800491437 /* MChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MChat.swift; sourceTree = "<group>"; };
 		9A31004E253CA36C00491437 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		9A310051253CA5EA00491437 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -204,7 +204,7 @@
 			children = (
 				9A310049253C84C800491437 /* MChat.swift */,
 				9A0CA8F62544733900198E8C /* MMessage.swift */,
-				9A310046253C84BA00491437 /* MUser.swift */,
+				9A310046253C84BA00491437 /* ChatUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -456,7 +456,7 @@
 				9A3AD4912538D14F00636AD1 /* OneLineTextField.swift in Sources */,
 				9AF795F92539FDAC00FEBC93 /* MainTabBarController.swift in Sources */,
 				9A0C9977253F89E0001FFDAF /* Validator.swift in Sources */,
-				9A310047253C84BA00491437 /* MUser.swift in Sources */,
+				9A310047253C84BA00491437 /* ChatUser.swift in Sources */,
 				9A31002E253C4C8400491437 /* ActiveChatCell.swift in Sources */,
 				9A31005A253CDE9600491437 /* InsertableTextField.swift in Sources */,
 				9A3AD48E2538BC4400636AD1 /* SignUpViewController.swift in Sources */,

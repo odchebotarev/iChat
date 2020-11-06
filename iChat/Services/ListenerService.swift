@@ -23,7 +23,7 @@ class ListenerService {
         return Auth.auth().currentUser!.uid
     }
     
-    func usersObserve(users: [MUser], completion: @escaping (Result<[MUser], Error>) -> Void) -> ListenerRegistration {
+    func usersObserve(users: [ChatUser], completion: @escaping (Result<[ChatUser], Error>) -> Void) -> ListenerRegistration {
         var users = users
         let usersListener = usersReference.addSnapshotListener { (querySnapshot, error) in
             guard error == nil, let snapshot = querySnapshot else {
@@ -32,17 +32,17 @@ class ListenerService {
             }
             
             snapshot.documentChanges.forEach { (diff) in
-                guard let mUser = MUser(document: diff.document) else { return }
+                guard let chatUser = ChatUser(document: diff.document) else { return }
                 switch diff.type {
                 case .added:
-                    guard !users.contains(mUser) else { return }
-                    guard mUser.id != self.currentUserId else { return }
-                    users.append(mUser)
+                    guard !users.contains(chatUser) else { return }
+                    guard chatUser.id != self.currentUserId else { return }
+                    users.append(chatUser)
                 case .modified:
-                    guard let index = users.firstIndex(of: mUser) else { return }
-                    users[index] = mUser
+                    guard let index = users.firstIndex(of: chatUser) else { return }
+                    users[index] = chatUser
                 case .removed:
-                    guard let index = users.firstIndex(of: mUser) else { return }
+                    guard let index = users.firstIndex(of: chatUser) else { return }
                     users.remove(at: index)
                 }
             }

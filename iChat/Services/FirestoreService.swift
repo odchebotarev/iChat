@@ -34,18 +34,18 @@ class FirestoreService {
         ].joined(separator: "/"))
     }
     
-    var currentUser: MUser!
+    var currentUser: ChatUser!
     
-    func getUserData(user: User, completion: @escaping (Result<MUser, Error>) -> Void) {
+    func getUserData(user: User, completion: @escaping (Result<ChatUser, Error>) -> Void) {
         let docRef = usersRef.document(user.uid)
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
-                guard let mUser = MUser(document: document) else {
-                    completion(.failure(UserError.cannotUnwrapToMUser))
+                guard let chatUser = ChatUser(document: document) else {
+                    completion(.failure(UserError.cannotUnwrapToChatUser))
                     return
                 }
-                self.currentUser = mUser
-                completion(.success(mUser))
+                self.currentUser = chatUser
+                completion(.success(chatUser))
             } else {
                 completion(.failure(UserError.cannotGetUserInfo))
             }
@@ -58,7 +58,7 @@ class FirestoreService {
                          avatarImage: UIImage?,
                          description: String?,
                          sex: String?,
-                         completion: @escaping (Result<MUser, Error>) -> Void) {
+                         completion: @escaping (Result<ChatUser, Error>) -> Void) {
         
         guard Validator.isFilled(userName: userName, description: description, sex: sex) else {
             completion(.failure(UserError.notFilled))
@@ -70,7 +70,7 @@ class FirestoreService {
             return
         }
         
-        var mUser = MUser(userName: userName!,
+        var chatUser = ChatUser(userName: userName!,
                           email: email,
                           avatarStringURL: "not exist",
                           description: description!,
@@ -80,12 +80,12 @@ class FirestoreService {
         StorageService.shared.upload(photo: avatarImage!) { (result) in
             switch result {
             case .success(let url):
-                mUser.avatarStringURL = url.absoluteString
-                self.usersRef.document(mUser.id).setData(mUser.representation) { (error) in
+                chatUser.avatarStringURL = url.absoluteString
+                self.usersRef.document(chatUser.id).setData(chatUser.representation) { (error) in
                     if let error = error {
                         completion(.failure(error))
                     } else {
-                        completion(.success(mUser))
+                        completion(.success(chatUser))
                     }
                 }
             case .failure(let error):
@@ -94,7 +94,7 @@ class FirestoreService {
         }
     }
     
-    func createWaitingChat(message: String, receiver: MUser, completion: @escaping (Result<Void, Error>) -> Void) {
+    func createWaitingChat(message: String, receiver: ChatUser, completion: @escaping (Result<Void, Error>) -> Void) {
         
         let reference = db.collection([
             FirestoreCollection.users.rawValue,

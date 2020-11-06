@@ -81,7 +81,7 @@ class UserCell: UICollectionViewCell, SelfConfiguringCell {
     }
     
     func configure<U: Hashable>(with value: U) {
-        guard let user = value as? MUser else { return }
+        guard let user = value as? ChatUser else { return }
         userName.text = user.userName
         guard let url = URL(string: user.avatarStringURL) else { return }
         userImageView.sd_setImage(with: url, completed: nil)
