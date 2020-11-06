@@ -10,6 +10,8 @@ import FirebaseFirestore
 
 class ConversationsViewController: UIViewController {
     
+    let name = "Conversations"
+    
     var waitingChats = [Chat]()
     var activeChats = [Chat]()
     

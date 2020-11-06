@@ -25,7 +25,7 @@ class MainTabBarController: UITabBarController {
         
         self.tabBar.tintColor = .violet
         
-        let listViewController = ConversationsViewController(currentUser: currentUser)
+        let conversationsViewController = ConversationsViewController(currentUser: currentUser)
         let peopleViewController = PeopleViewController(currentUser: currentUser)
         
         let boldConfig = UIImage.SymbolConfiguration(weight: .medium)
@@ -33,8 +33,8 @@ class MainTabBarController: UITabBarController {
         let peopleImage = UIImage(systemName: "person.2", withConfiguration: boldConfig)!
         
         viewControllers = [
-            generateNavigationController(rootViewController: peopleViewController, title: "People", image: peopleImage),
-            generateNavigationController(rootViewController: listViewController, title: "Conversations", image: conversationImage)
+            generateNavigationController(rootViewController: peopleViewController, title: peopleViewController.name, image: peopleImage),
+            generateNavigationController(rootViewController: conversationsViewController, title: conversationsViewController.name, image: conversationImage)
         ]
     }
     

@@ -11,6 +11,8 @@ import FirebaseFirestore
 
 class PeopleViewController: UIViewController {
     
+    let name = "People"
+    
     var users = [ChatUser]()
     private var usersListener: ListenerRegistration?
     
@@ -23,7 +25,7 @@ class PeopleViewController: UIViewController {
         func description(usersCount: Int) -> String {
             switch self {
             case .users:
-                return "There is \(usersCount) people nearby"
+                return usersCount == 1 ? "There is \(usersCount) person nearby" : "There are \(usersCount) people nearby"
             }
         }
     }
