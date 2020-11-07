@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class ConversationsViewController: UIViewController {
     
@@ -59,6 +60,8 @@ class ConversationsViewController: UIViewController {
         createDataSource()
         reloadData()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(signOut))
+        
         waitingChatsListener = ListenerService.shared.waitingChatsObserve(chats: waitingChats, completion: { (result) in
             switch result {
             case .success(let chats):
@@ -83,6 +86,21 @@ class ConversationsViewController: UIViewController {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
+    }
+    
+    @objc private func signOut() {
+        let signOutAlertController = UIAlertController(title: nil, message: "Are you sure you want to sign out?", preferredStyle: .alert)
+        signOutAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        signOutAlertController.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { (_) in
+            do {
+                try Auth.auth().signOut()
+//                UIApplication.shared.keyWindow?.rootViewController = AuthViewController()
+                (UIApplication.shared.windows.first { $0.isKeyWindow })?.rootViewController = AuthViewController()
+            } catch {
+                print("Error signing out: \(error.localizedDescription)")
+            }
+        }))
+        present(signOutAlertController, animated: true, completion: nil)
     }
     
     private func setupSearchBar() {
