@@ -53,6 +53,7 @@ class SetupProfileViewController: UIViewController {
         view.backgroundColor = .white
         
         setupConstraints()
+        setupViews()
         
         goToChatsButton.addTarget(self, action: #selector(goToChatsButtonTapped), for: .touchUpInside)
         fullImageView.plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
@@ -61,11 +62,10 @@ class SetupProfileViewController: UIViewController {
     @objc private func plusButtonTapped() {
         loadIndicatorView.startAnimating()
         let imagePickerController = UIImagePickerController()
+        imagePickerController.modalPresentationStyle = .fullScreen
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
-        present(imagePickerController, animated: true) {
-            self.loadIndicatorView.stopAnimating()
-        }
+        present(imagePickerController, animated: true)
     }
     
     @objc private func goToChatsButtonTapped() {
@@ -150,14 +150,33 @@ private extension SetupProfileViewController {
     
 }
 
+// MARK: - Setup views
+private extension SetupProfileViewController {
+    
+    func setupViews() {
+        fullNameTextField.autocapitalizationType = .none
+        fullNameTextField.autocorrectionType = .no
+    }
+    
+}
+
 // MARK: - UIImagePickerControllerDelegate
 extension SetupProfileViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        picker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true) {
+            self.loadIndicatorView.stopAnimating()
+        }
+        
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else { return }
         fullImageView.circleImageView.image = image
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true) {
+            self.loadIndicatorView.stopAnimating()
+        }
     }
     
 }

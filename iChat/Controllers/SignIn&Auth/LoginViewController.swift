@@ -156,6 +156,9 @@ private extension LoginViewController {
 private extension LoginViewController {
     
     func setupViews() {
+        emailTextField.autocapitalizationType = .none
+        emailTextField.autocorrectionType = .no
+        
         passwordTextField.isSecureTextEntry = true
     }
     

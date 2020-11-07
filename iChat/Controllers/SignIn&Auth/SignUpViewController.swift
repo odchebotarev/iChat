@@ -137,6 +137,9 @@ private extension SignUpViewController {
 private extension SignUpViewController {
     
     func setupViews() {
+        emailTextField.autocapitalizationType = .none
+        emailTextField.autocorrectionType = .no
+        
         passwordTextField.isSecureTextEntry = true
         confirmPasswordTextField.isSecureTextEntry = true
     }
