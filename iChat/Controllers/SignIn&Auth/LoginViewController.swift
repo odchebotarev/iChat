@@ -10,6 +10,8 @@ import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
+    let loadIndicatorView = UIActivityIndicatorView()
+    
     let welcomeLabel = UILabel(text: "Welcome back!", font: .avenir26)
     
     let loginWithLabel = UILabel(text: "Login with")
@@ -48,10 +50,12 @@ class LoginViewController: UIViewController {
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(googleButtonTapped), for: .touchUpInside)
+        
+        GIDSignIn.sharedInstance()?.delegate = self
     }
     
     @objc private func loginButtonTapped() {
-        print(#function)
+        loadIndicatorView.startAnimating()
         AuthService.shared.login(email: emailTextField.text, password: passwordTextField.text) { (result) in
             switch result {
             case .success(let user):
@@ -70,6 +74,7 @@ class LoginViewController: UIViewController {
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
+            self.loadIndicatorView.stopAnimating()
         }
     }
     
@@ -80,6 +85,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func googleButtonTapped() {
+        loadIndicatorView.startAnimating()
         GIDSignIn.sharedInstance()?.presentingViewController = self
         GIDSignIn.sharedInstance()?.signIn()
     }
@@ -113,10 +119,12 @@ private extension LoginViewController {
         welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         bottomStackView.translatesAutoresizingMaskIntoConstraints = false
+        loadIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(welcomeLabel)
         view.addSubview(stackView)
         view.addSubview(bottomStackView)
+        view.addSubview(loadIndicatorView)
                 
         NSLayoutConstraint.activate([
             welcomeLabel.bottomAnchor.constraint(lessThanOrEqualTo: stackView.topAnchor, constant: -30),
@@ -134,7 +142,12 @@ private extension LoginViewController {
             bottomStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
             bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
-        ])        
+        ])
+        
+        NSLayoutConstraint.activate([
+            loadIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
         
     }
 }
@@ -146,4 +159,32 @@ private extension LoginViewController {
         passwordTextField.isSecureTextEntry = true
     }
     
+}
+
+// MARK: - GIDSignInDelegate
+extension LoginViewController: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        AuthService.shared.googleLogin(user: user, error: error) { (result) in
+            switch result {
+            case .success(let user):
+                FirestoreService.shared.getUserData(user: user) { (result) in
+                    switch result {
+                    case .success(let chatUser):
+                        UIApplication.getTopViewController()?.showAlert(with: "Success", and: "You have been authorized.") {
+                            let mainTabBarController = MainTabBarController(currentUser: chatUser)
+                            mainTabBarController.modalPresentationStyle = .fullScreen
+                            UIApplication.getTopViewController()?.present(mainTabBarController, animated: true, completion: nil)
+                        }
+                    case .failure(_):
+                        UIApplication.getTopViewController()?.showAlert(with: "Success", and: "You have been registered.") {
+                            UIApplication.getTopViewController()?.present(SetupProfileViewController(currentUser: user), animated: true, completion: nil)
+                        }
+                    }
+                }
+            case .failure(let error):
+                self.showAlert(with: "Error", and: error.localizedDescription)
+            }
+            self.loadIndicatorView.stopAnimating()
+        }
+    }
 }

@@ -11,6 +11,8 @@ import SDWebImage
 
 class SetupProfileViewController: UIViewController {
     
+    let loadIndicatorView = UIActivityIndicatorView()
+    
     let welcomeLabel = UILabel(text: "Set up profile!", font: .avenir26)
     
     let fullImageView = AddPhotoView()
@@ -57,14 +59,17 @@ class SetupProfileViewController: UIViewController {
     }
     
     @objc private func plusButtonTapped() {
-        
+        loadIndicatorView.startAnimating()
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
-        present(imagePickerController, animated: true, completion: nil)
+        present(imagePickerController, animated: true) {
+            self.loadIndicatorView.stopAnimating()
+        }
     }
     
     @objc private func goToChatsButtonTapped() {
+        loadIndicatorView.startAnimating()
         FirestoreService.shared.saveProfileWith(id: currentUser.uid,
                                                 email: currentUser.email!,
                                                 userName: fullNameTextField.text,
@@ -81,6 +86,7 @@ class SetupProfileViewController: UIViewController {
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
+            self.loadIndicatorView.stopAnimating()
         }
     }
     
@@ -111,10 +117,12 @@ private extension SetupProfileViewController {
         fullImageView.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         goToChatsButton.translatesAutoresizingMaskIntoConstraints = false
+        loadIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(welcomeLabel)
         view.addSubview(fullImageView)
         view.addSubview(stackView)
+        view.addSubview(loadIndicatorView)
         
         NSLayoutConstraint.activate([
             welcomeLabel.bottomAnchor.constraint(lessThanOrEqualTo: fullImageView.topAnchor, constant: -30),
@@ -131,6 +139,11 @@ private extension SetupProfileViewController {
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+        ])
+        
+        NSLayoutConstraint.activate([
+            loadIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
     }

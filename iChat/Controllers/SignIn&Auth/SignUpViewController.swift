@@ -9,6 +9,8 @@ import UIKit
 
 class SignUpViewController: UIViewController {
     
+    let loadIndicatorView = UIActivityIndicatorView()
+    
     let welcomeLabel = UILabel(text: "Good to see you!", font: .avenir26)
     
     let emailLabel = UILabel(text: "Email")
@@ -50,7 +52,7 @@ class SignUpViewController: UIViewController {
     }
     
     @objc private func signUpButtonTapped() {
-        print(#function)
+        loadIndicatorView.startAnimating()
         AuthService.shared.register(email: emailTextField.text, password: passwordTextField.text, confirmPassword: confirmPasswordTextField.text) { (result) in
             switch result {
             case .success(let user):
@@ -60,6 +62,7 @@ class SignUpViewController: UIViewController {
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
+            self.loadIndicatorView.stopAnimating()
         }
     }
     
@@ -96,10 +99,12 @@ private extension SignUpViewController {
         welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         bottomStackView.translatesAutoresizingMaskIntoConstraints = false
+        loadIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(welcomeLabel)
         view.addSubview(stackView)
         view.addSubview(bottomStackView)
+        view.addSubview(loadIndicatorView)
         
         NSLayoutConstraint.activate([
             welcomeLabel.bottomAnchor.constraint(lessThanOrEqualTo: stackView.topAnchor, constant: -30),
@@ -117,6 +122,11 @@ private extension SignUpViewController {
             bottomStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40),
             bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+        ])
+
+        NSLayoutConstraint.activate([
+            loadIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
     }
