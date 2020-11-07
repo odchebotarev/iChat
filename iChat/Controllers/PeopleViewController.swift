@@ -12,30 +12,19 @@ import FirebaseFirestore
 class PeopleViewController: UIViewController {
     
     let name = "People"
+    private let currentUser: ChatUser
     
     var users = [ChatUser]()
     private var usersListener: ListenerRegistration?
     
     var collectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, ChatUser>!
+    var dataSource: UICollectionViewDiffableDataSource<PeopleSection, ChatUser>!
     
-    enum Section: Int, CaseIterable {
-        case users
-        
-        func description(usersCount: Int) -> String {
-            switch self {
-            case .users:
-                return usersCount == 1 ? "There is \(usersCount) person nearby" : "There are \(usersCount) people nearby"
-            }
-        }
-    }
-    
-    private let currentUser: ChatUser
     
     init(currentUser: ChatUser) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
-        self.title = currentUser.userName
+        title = currentUser.userName
     }
     
     required init?(coder: NSCoder) {
@@ -111,7 +100,7 @@ class PeopleViewController: UIViewController {
         
         let filtered = users.filter { $0.contains(substring: searchText) }
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, ChatUser>()
+        var snapshot = NSDiffableDataSourceSnapshot<PeopleSection, ChatUser>()
         snapshot.appendSections([.users])
         snapshot.appendItems(filtered, toSection: .users)
         dataSource.apply(snapshot, animatingDifferences: true)
@@ -122,8 +111,8 @@ class PeopleViewController: UIViewController {
 // MARK: - Data source
 private extension PeopleViewController {
     func createDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, ChatUser>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, user) -> UICollectionViewCell? in
-            guard let section = Section(rawValue: indexPath.section) else {
+        dataSource = UICollectionViewDiffableDataSource<PeopleSection, ChatUser>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, user) -> UICollectionViewCell? in
+            guard let section = PeopleSection(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }
             
@@ -138,7 +127,7 @@ private extension PeopleViewController {
                 fatalError("Can not create new section header")
             }
             
-            guard let section = Section(rawValue: indexPath.section) else {
+            guard let section = PeopleSection(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }
             let items = self.dataSource.snapshot().itemIdentifiers(inSection: .users)
@@ -153,9 +142,9 @@ private extension PeopleViewController {
 private extension PeopleViewController {
     
     func createCompositionalLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, _) -> NSCollectionLayoutSection? in
             
-            guard let section = Section(rawValue: sectionIndex) else {
+            guard let section = PeopleSection(rawValue: sectionIndex) else {
                 fatalError("Unknown section kind")
             }
             

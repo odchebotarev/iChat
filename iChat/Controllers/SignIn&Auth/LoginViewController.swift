@@ -43,6 +43,7 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         
         setupConstraints()
+        setupViews()
         
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
@@ -136,4 +137,13 @@ private extension LoginViewController {
         ])        
         
     }
+}
+
+// MARK: - Setup views
+private extension LoginViewController {
+    
+    func setupViews() {
+        passwordTextField.isSecureTextEntry = true
+    }
+    
 }

@@ -12,6 +12,7 @@ import FirebaseAuth
 class ConversationsViewController: UIViewController {
     
     let name = "Conversations"
+    private let currentUser: ChatUser
     
     var waitingChats = [Chat]()
     var activeChats = [Chat]()
@@ -19,27 +20,14 @@ class ConversationsViewController: UIViewController {
     private var waitingChatsListener: ListenerRegistration?
     private var activeChatsListener: ListenerRegistration?
     
-    enum Section: Int, CaseIterable {
-        case waitingChats, activeChats
-        
-        func description() -> String {
-            switch self {
-            case .waitingChats:
-                return "Waiting chats"
-            case .activeChats:
-                return "Active chats"
-            }
-        }
-    }
-    
-    var dataSource: UICollectionViewDiffableDataSource<Section, Chat>?
+    var dataSource: UICollectionViewDiffableDataSource<ConversationsSection, Chat>?
     var collectionView: UICollectionView!
-    
-    private let currentUser: ChatUser
     
     init(currentUser: ChatUser) {
         self.currentUser = currentUser
+        
         super.init(nibName: nil, bundle: nil)
+        
         title = currentUser.userName
     }
     
@@ -131,7 +119,7 @@ class ConversationsViewController: UIViewController {
     }
     
     private func reloadData() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Chat>()
+        var snapshot = NSDiffableDataSourceSnapshot<ConversationsSection, Chat>()
         snapshot.appendSections([.waitingChats, .activeChats])
         snapshot.appendItems(waitingChats, toSection: .waitingChats)
         snapshot.appendItems(activeChats, toSection: .activeChats)
@@ -144,8 +132,8 @@ class ConversationsViewController: UIViewController {
 private extension ConversationsViewController {
     
     func createDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, Chat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
-            guard let section = Section(rawValue: indexPath.section) else {
+        dataSource = UICollectionViewDiffableDataSource<ConversationsSection, Chat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
+            guard let section = ConversationsSection(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }
             
@@ -162,7 +150,7 @@ private extension ConversationsViewController {
                 fatalError("Can not create new section header")
             }
             
-            guard let section = Section(rawValue: indexPath.section) else {
+            guard let section = ConversationsSection(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }
             sectionHeader.configure(text: section.description(), font: .laoSangamMN20, textColor: .headerGray)
@@ -179,7 +167,7 @@ private extension ConversationsViewController {
     func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             
-            guard let section = Section(rawValue: sectionIndex) else {
+            guard let section = ConversationsSection(rawValue: sectionIndex) else {
                 fatalError("Unknown section kind")
             }
             
@@ -256,7 +244,7 @@ extension ConversationsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let chat = self.dataSource?.itemIdentifier(for: indexPath) else { return }
-        guard let section = Section(rawValue: indexPath.section) else { return }
+        guard let section = ConversationsSection(rawValue: indexPath.section) else { return }
         
         switch section {
         case .waitingChats:
