@@ -50,16 +50,22 @@ class ConversationsViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(signOut))
         
+        if UserDefaults.standard.object(forKey: "waitingChatsCount") as? Int == nil {
+            UserDefaults.standard.set(0, forKey: "waitingChatsCount")
+        }
+        
         waitingChatsListener = ListenerService.shared.waitingChatsObserve(chats: waitingChats, completion: { (result) in
             switch result {
             case .success(let chats):
-                if self.waitingChats != [], self.waitingChats.count <= chats.count {
+                let waitingChatsCount = UserDefaults.standard.object(forKey: "waitingChatsCount") as? Int ?? 0
+                if waitingChatsCount < chats.count {
                     let chatRequestViewController = ChatRequestViewController(chat: chats.last!)
                     chatRequestViewController.delegate = self
                     self.present(chatRequestViewController, animated: true, completion: nil)
                 }
                 self.waitingChats = chats
                 self.reloadData()
+                UserDefaults.standard.set(chats.count, forKey: "waitingChatsCount")
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }

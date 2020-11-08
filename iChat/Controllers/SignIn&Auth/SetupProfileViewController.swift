@@ -77,6 +77,7 @@ class SetupProfileViewController: UIViewController {
                                                 sex: sexSegmentedControl.titleForSegment(at: sexSegmentedControl.selectedSegmentIndex)) { (result) in
             switch result {
             case .success(let chatUser):
+                FirestoreService.shared.currentUser = chatUser
                 self.showAlert(with: "Success", and: "Have a great chat!") {
                     let mainTabBarController = MainTabBarController(currentUser: chatUser)
                     mainTabBarController.modalPresentationStyle = .fullScreen
