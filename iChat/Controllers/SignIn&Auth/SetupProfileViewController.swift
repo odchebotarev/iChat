@@ -11,6 +11,8 @@ import SDWebImage
 
 class SetupProfileViewController: UIViewController {
     
+    let loadIndicatorView = UIActivityIndicatorView()
+    
     let welcomeLabel = UILabel(text: "Set up profile!", font: .avenir26)
     
     let fullImageView = AddPhotoView()
@@ -35,7 +37,6 @@ class SetupProfileViewController: UIViewController {
         if let userName = currentUser.displayName {
             fullNameTextField.text = userName
         }
-//         TODO: set google image
         if let photoURL = currentUser.photoURL {
             fullImageView.circleImageView.sd_setImage(with: photoURL, completed: nil)
         }
@@ -51,20 +52,23 @@ class SetupProfileViewController: UIViewController {
         view.backgroundColor = .white
         
         setupConstraints()
+        setupViews()
         
         goToChatsButton.addTarget(self, action: #selector(goToChatsButtonTapped), for: .touchUpInside)
         fullImageView.plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
     }
     
     @objc private func plusButtonTapped() {
-        
+        loadIndicatorView.startAnimating()
         let imagePickerController = UIImagePickerController()
+        imagePickerController.modalPresentationStyle = .fullScreen
         imagePickerController.delegate = self
         imagePickerController.sourceType = .photoLibrary
-        present(imagePickerController, animated: true, completion: nil)
+        present(imagePickerController, animated: true)
     }
     
     @objc private func goToChatsButtonTapped() {
+        loadIndicatorView.startAnimating()
         FirestoreService.shared.saveProfileWith(id: currentUser.uid,
                                                 email: currentUser.email!,
                                                 userName: fullNameTextField.text,
@@ -81,6 +85,7 @@ class SetupProfileViewController: UIViewController {
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
+            self.loadIndicatorView.stopAnimating()
         }
     }
     
@@ -111,10 +116,12 @@ private extension SetupProfileViewController {
         fullImageView.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
         goToChatsButton.translatesAutoresizingMaskIntoConstraints = false
+        loadIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(welcomeLabel)
         view.addSubview(fullImageView)
         view.addSubview(stackView)
+        view.addSubview(loadIndicatorView)
         
         NSLayoutConstraint.activate([
             welcomeLabel.bottomAnchor.constraint(lessThanOrEqualTo: fullImageView.topAnchor, constant: -30),
@@ -133,6 +140,21 @@ private extension SetupProfileViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
         ])
         
+        NSLayoutConstraint.activate([
+            loadIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+    }
+    
+}
+
+// MARK: - Setup views
+private extension SetupProfileViewController {
+    
+    func setupViews() {
+        fullNameTextField.autocapitalizationType = .none
+        fullNameTextField.autocorrectionType = .no
     }
     
 }
@@ -142,9 +164,18 @@ extension SetupProfileViewController: UINavigationControllerDelegate, UIImagePic
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        picker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true) {
+            self.loadIndicatorView.stopAnimating()
+        }
+        
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else { return }
         fullImageView.circleImageView.image = image
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true) {
+            self.loadIndicatorView.stopAnimating()
+        }
     }
     
 }

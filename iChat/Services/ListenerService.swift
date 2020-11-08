@@ -55,7 +55,11 @@ class ListenerService {
     func waitingChatsObserve(chats: [Chat], completion: @escaping (Result<[Chat], Error>) -> Void) -> ListenerRegistration {
         
         var chats = chats
-        let chatsReference = db.collection([FirestoreCollection.users.rawValue, currentUserId, UserCollection.waitingChats.rawValue].joined(separator: "/"))
+        let chatsReference = db.collection([
+            FirestoreCollection.users.rawValue,
+            currentUserId,
+            UserCollection.waitingChats.rawValue
+        ].joined(separator: "/"))
         let chatsListener = chatsReference.addSnapshotListener { (querySnapshot, error) in
             guard let snapshot = querySnapshot else {
                 completion(.failure(error!))

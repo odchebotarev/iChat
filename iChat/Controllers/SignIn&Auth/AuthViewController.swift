@@ -10,6 +10,8 @@ import GoogleSignIn
 
 class AuthViewController: UIViewController {
     
+    let loadIndicatorView = UIActivityIndicatorView()
+    
     let logoImageView = UIImageView(image: UIImage(named: "Logo"), contentMode: .scaleAspectFit)
     
     let googleLabel = UILabel(text: "Get started with")
@@ -61,6 +63,7 @@ class AuthViewController: UIViewController {
     }
     
     @objc private func googleButtonTapped() {
+        loadIndicatorView.startAnimating()
         GIDSignIn.sharedInstance()?.presentingViewController = self
         GIDSignIn.sharedInstance()?.signIn()
     }
@@ -80,9 +83,11 @@ private extension AuthViewController {
         
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        loadIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(logoImageView)
         view.addSubview(stackView)
+        view.addSubview(loadIndicatorView)
         
         NSLayoutConstraint.activate([
             logoImageView.bottomAnchor.constraint(lessThanOrEqualTo: stackView.topAnchor, constant: -80),
@@ -94,6 +99,11 @@ private extension AuthViewController {
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40)
+        ])
+        
+        NSLayoutConstraint.activate([
+            loadIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
     }
@@ -135,6 +145,7 @@ extension AuthViewController: GIDSignInDelegate {
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
+            self.loadIndicatorView.stopAnimating()
         }
     }
 }
