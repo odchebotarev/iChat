@@ -37,7 +37,6 @@ class SetupProfileViewController: UIViewController {
         if let userName = currentUser.displayName {
             fullNameTextField.text = userName
         }
-//         TODO: set google image
         if let photoURL = currentUser.photoURL {
             fullImageView.circleImageView.sd_setImage(with: photoURL, completed: nil)
         }
