@@ -199,6 +199,10 @@ extension PeopleViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         reloadData(with: searchText)
     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        reloadData(with: nil)
+    }
 }
 
 // MARK: - UICollectionViewDelegate
