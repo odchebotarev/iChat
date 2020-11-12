@@ -55,11 +55,11 @@ class AuthViewController: UIViewController {
     }
     
     @objc private func emailButtonTapped() {
-        self.present(signUpVC, animated: true, completion: nil)
+        present(signUpVC, animated: true, completion: nil)
     }
     
     @objc private func loginButtonTapped() {
-        self.present(loginVC, animated: true, completion: nil)
+        present(loginVC, animated: true, completion: nil)
     }
     
     @objc private func googleButtonTapped() {
