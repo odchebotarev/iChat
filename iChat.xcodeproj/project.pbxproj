@@ -58,6 +58,7 @@
 		9ACD6B1E2540D914001C4568 /* AuthNavigatingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACD6B1D2540D914001C4568 /* AuthNavigatingDelegate.swift */; };
 		9ACD6B212540DB3E001C4568 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACD6B202540DB3E001C4568 /* FirestoreService.swift */; };
 		9ACD6B372540DEA5001C4568 /* UserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ACD6B362540DEA5001C4568 /* UserError.swift */; };
+		9AD148CE255D4DB80038FE6F /* UIScrollView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD148CD255D4DB80038FE6F /* UIScrollView+Extension.swift */; };
 		9AF62394253881B60091FDDF /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF62393253881B60091FDDF /* UIButton+Extension.swift */; };
 		9AF795F22539F99400FEBC93 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF795F12539F99400FEBC93 /* ConversationsViewController.swift */; };
 		9AF795F92539FDAC00FEBC93 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF795F82539FDAC00FEBC93 /* MainTabBarController.swift */; };
@@ -118,6 +119,7 @@
 		9ACD6B1D2540D914001C4568 /* AuthNavigatingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNavigatingDelegate.swift; sourceTree = "<group>"; };
 		9ACD6B202540DB3E001C4568 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		9ACD6B362540DEA5001C4568 /* UserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserError.swift; sourceTree = "<group>"; };
+		9AD148CD255D4DB80038FE6F /* UIScrollView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extension.swift"; sourceTree = "<group>"; };
 		9AF62393253881B60091FDDF /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		9AF795F12539F99400FEBC93 /* ConversationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsViewController.swift; sourceTree = "<group>"; };
 		9AF795F82539FDAC00FEBC93 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				9A3AD4882538B05400636AD1 /* UIStackView+Extension.swift */,
 				9A310051253CA5EA00491437 /* UIViewController+Extension.swift */,
 				9A31005C253CE18900491437 /* UIView+Extension.swift */,
+				9AD148CD255D4DB80038FE6F /* UIScrollView+Extension.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				9A166495253893490006D0B6 /* UIFont+Extension.swift in Sources */,
 				9A06D2402554950F005B0424 /* UploadError.swift in Sources */,
 				9A920453253E3646000FA932 /* AuthService.swift in Sources */,
+				9AD148CE255D4DB80038FE6F /* UIScrollView+Extension.swift in Sources */,
 				9A3AD4942538E68700636AD1 /* LoginViewController.swift in Sources */,
 				9A0CA8FB2544B89400198E8C /* WaitingChatsNavigation.swift in Sources */,
 				9A7FC8982555FB0B00A162F8 /* ImageItem.swift in Sources */,

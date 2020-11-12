@@ -34,14 +34,12 @@ struct ChatMessage: Hashable, MessageType {
     
     init(user: ChatUser, content: String) {
         self.content = content
-//        self.sender = Sender(senderId: user.id, displayName: user.userName)
         self.sender = user
         self.sentDate = Date()
         self.id = nil
     }
     
     init(user: ChatUser, image: UIImage) {
-//        self.sender = Sender(senderId: user.id, displayName: user.userName)
         self.sender = user
         self.image = image
         self.content = ""
@@ -57,7 +55,7 @@ struct ChatMessage: Hashable, MessageType {
         
         self.id = document.documentID
         self.sentDate = sentData.dateValue()
-        self.sender = Sender(senderId: senderId, displayName: senderName)
+        self.sender = ChatUser(userName: senderName, id: senderId)
         
         if let content = data["content"] as? String {
             self.content = content

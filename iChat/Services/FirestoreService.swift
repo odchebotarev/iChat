@@ -37,8 +37,8 @@ class FirestoreService {
     var currentUser: ChatUser!
     
     func getUserData(user: User, completion: @escaping (Result<ChatUser, Error>) -> Void) {
-        let docRef = usersReference.document(user.uid)
-        docRef.getDocument { (document, error) in
+        let docReference = usersReference.document(user.uid)
+        docReference.getDocument { (document, error) in
             if let document = document, document.exists {
                 guard let chatUser = ChatUser(document: document) else {
                     completion(.failure(UserError.cannotUnwrapToChatUser))
