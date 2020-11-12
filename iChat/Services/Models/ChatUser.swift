@@ -17,10 +17,10 @@ struct ChatUser: Hashable, Decodable {
     var id: String
     
     init(userName: String,
-         email: String,
-         avatarStringURL: String,
-         description: String,
-         sex: String,
+         email: String = "",
+         avatarStringURL: String = "",
+         description: String = "",
+         sex: String = "",
          id: String) {
         self.userName = userName
         self.email = email
