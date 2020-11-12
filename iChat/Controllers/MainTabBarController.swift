@@ -23,22 +23,22 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tabBar.tintColor = .violet
+        tabBar.tintColor = .violet
         
-        let listViewController = ConversationsViewController(currentUser: currentUser)
+        let conversationsViewController = ConversationsViewController(currentUser: currentUser)
         let peopleViewController = PeopleViewController(currentUser: currentUser)
         
         let boldConfig = UIImage.SymbolConfiguration(weight: .medium)
-        let conversationImage = UIImage(systemName: "bubble.left.and.bubble.right", withConfiguration: boldConfig)!
-        let peopleImage = UIImage(systemName: "person.2", withConfiguration: boldConfig)!
+        let conversationImage = UIImage(systemName: "bubble.left.and.bubble.right", withConfiguration: boldConfig)
+        let peopleImage = UIImage(systemName: "person.2", withConfiguration: boldConfig)
         
         viewControllers = [
-            generateNavigationController(rootViewController: peopleViewController, title: "People", image: peopleImage),
-            generateNavigationController(rootViewController: listViewController, title: "Conversations", image: conversationImage)
+            generateNavigationController(rootViewController: peopleViewController, title: peopleViewController.name, image: peopleImage),
+            generateNavigationController(rootViewController: conversationsViewController, title: conversationsViewController.name, image: conversationImage)
         ]
     }
     
-    private func generateNavigationController(rootViewController: UIViewController, title: String, image: UIImage) -> UIViewController {
+    private func generateNavigationController(rootViewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
         let navigationViewController = UINavigationController(rootViewController: rootViewController)
         navigationViewController.tabBarItem.title = title
         navigationViewController.tabBarItem.image = image

@@ -7,8 +7,12 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class ConversationsViewController: UIViewController {
+    
+    let name = "Conversations"
+    private let currentUser: ChatUser
     
     var waitingChats = [Chat]()
     var activeChats = [Chat]()
@@ -16,27 +20,14 @@ class ConversationsViewController: UIViewController {
     private var waitingChatsListener: ListenerRegistration?
     private var activeChatsListener: ListenerRegistration?
     
-    enum Section: Int, CaseIterable {
-        case waitingChats, activeChats
-        
-        func description() -> String {
-            switch self {
-            case .waitingChats:
-                return "Waiting chats"
-            case .activeChats:
-                return "Active chats"
-            }
-        }
-    }
-    
-    var dataSource: UICollectionViewDiffableDataSource<Section, Chat>?
+    var dataSource: UICollectionViewDiffableDataSource<ConversationsSection, Chat>?
     var collectionView: UICollectionView!
-    
-    private let currentUser: ChatUser
     
     init(currentUser: ChatUser) {
         self.currentUser = currentUser
+        
         super.init(nibName: nil, bundle: nil)
+        
         title = currentUser.userName
     }
     
@@ -57,16 +48,24 @@ class ConversationsViewController: UIViewController {
         createDataSource()
         reloadData()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Log Out", style: .plain, target: self, action: #selector(signOut))
+        
+        if UserDefaults.standard.object(forKey: "waitingChatsCount") as? Int == nil {
+            UserDefaults.standard.set(0, forKey: "waitingChatsCount")
+        }
+        
         waitingChatsListener = ListenerService.shared.waitingChatsObserve(chats: waitingChats, completion: { (result) in
             switch result {
             case .success(let chats):
-                if self.waitingChats != [], self.waitingChats.count <= chats.count {
+                let waitingChatsCount = UserDefaults.standard.object(forKey: "waitingChatsCount") as? Int ?? 0
+                if waitingChatsCount < chats.count {
                     let chatRequestViewController = ChatRequestViewController(chat: chats.last!)
                     chatRequestViewController.delegate = self
                     self.present(chatRequestViewController, animated: true, completion: nil)
                 }
                 self.waitingChats = chats
                 self.reloadData()
+                UserDefaults.standard.set(chats.count, forKey: "waitingChatsCount")
             case .failure(let error):
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
@@ -81,6 +80,21 @@ class ConversationsViewController: UIViewController {
                 self.showAlert(with: "Error", and: error.localizedDescription)
             }
         })
+    }
+    
+    @objc private func signOut() {
+        let signOutAlertController = UIAlertController(title: nil, message: "Are you sure you want to sign out?", preferredStyle: .alert)
+        signOutAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        signOutAlertController.addAction(UIAlertAction(title: "Sign Out", style: .destructive, handler: { (_) in
+            do {
+                try Auth.auth().signOut()
+//                UIApplication.shared.keyWindow?.rootViewController = AuthViewController()
+                (UIApplication.shared.windows.first { $0.isKeyWindow })?.rootViewController = AuthViewController()
+            } catch {
+                print("Error signing out: \(error.localizedDescription)")
+            }
+        }))
+        present(signOutAlertController, animated: true, completion: nil)
     }
     
     private func setupSearchBar() {
@@ -111,7 +125,7 @@ class ConversationsViewController: UIViewController {
     }
     
     private func reloadData() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Chat>()
+        var snapshot = NSDiffableDataSourceSnapshot<ConversationsSection, Chat>()
         snapshot.appendSections([.waitingChats, .activeChats])
         snapshot.appendItems(waitingChats, toSection: .waitingChats)
         snapshot.appendItems(activeChats, toSection: .activeChats)
@@ -124,8 +138,8 @@ class ConversationsViewController: UIViewController {
 private extension ConversationsViewController {
     
     func createDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, Chat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
-            guard let section = Section(rawValue: indexPath.section) else {
+        dataSource = UICollectionViewDiffableDataSource<ConversationsSection, Chat>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, chat) -> UICollectionViewCell? in
+            guard let section = ConversationsSection(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }
             
@@ -142,7 +156,7 @@ private extension ConversationsViewController {
                 fatalError("Can not create new section header")
             }
             
-            guard let section = Section(rawValue: indexPath.section) else {
+            guard let section = ConversationsSection(rawValue: indexPath.section) else {
                 fatalError("Unknown section kind")
             }
             sectionHeader.configure(text: section.description(), font: .laoSangamMN20, textColor: .headerGray)
@@ -159,7 +173,7 @@ private extension ConversationsViewController {
     func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             
-            guard let section = Section(rawValue: sectionIndex) else {
+            guard let section = ConversationsSection(rawValue: sectionIndex) else {
                 fatalError("Unknown section kind")
             }
             
@@ -236,7 +250,7 @@ extension ConversationsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let chat = self.dataSource?.itemIdentifier(for: indexPath) else { return }
-        guard let section = Section(rawValue: indexPath.section) else { return }
+        guard let section = ConversationsSection(rawValue: indexPath.section) else { return }
         
         switch section {
         case .waitingChats:

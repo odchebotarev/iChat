@@ -47,13 +47,13 @@ class GradientView: UIView {
         
     }
     
-    @IBInspectable private var startColor: UIColor? {
+    private var startColor: UIColor? {
         didSet {
             setupGradientColors(startColor: startColor, endColor: endColor)
         }
     }
     
-    @IBInspectable private var endColor: UIColor? {
+    private var endColor: UIColor? {
         didSet {
             setupGradientColors(startColor: startColor, endColor: endColor)
         }
@@ -90,6 +90,7 @@ class GradientView: UIView {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
         setupGradient(from: .leading, to: .trailing, startColor: startColor, endColor: endColor)
     }
     

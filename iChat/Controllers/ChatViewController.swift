@@ -58,13 +58,12 @@ class ChatViewController: MessagesViewController {
             case .success(var message):
                 if let url = message.downloadURL {
                     StorageService.shared.downloadImage(url: url) { [weak self] (result) in
-                        guard let self = self else { return }
                         switch result {
                         case .success(let image):
                             message.image = image
-                            self.insertNewMessage(message: message)
+                            self?.insertNewMessage(message: message)
                         case .failure(let error):
-                            self.showAlert(with: "Error", and: error.localizedDescription)
+                            self?.showAlert(with: "Error", and: error.localizedDescription)
                         }
                     }
                 } else {
@@ -189,7 +188,6 @@ extension ChatViewController {
 extension ChatViewController: MessagesDataSource {
     
     func currentSender() -> SenderType {
-//        return Sender(senderId: user.id, displayName: user.userName)
         return user
     }
     
@@ -271,28 +269,13 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
     
 }
 
+// MARK: - UINavigationControllerDelegate, UIImagePickerControllerDelegate
 extension ChatViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else { return }
         sendImage(image: image)
-    }
-    
-}
-
-extension UIScrollView {
-    
-    var isAtBottom: Bool {
-        return contentOffset.y >= verticalOffsetForBottom - 20
-    }
-    
-    var verticalOffsetForBottom: CGFloat {
-        let scrollViewHeight = bounds.height
-        let scrollContentSizeHeight = contentSize.height
-        let bottomInset = contentInset.bottom
-        let scrollViewBottomOffset = scrollContentSizeHeight + bottomInset - scrollViewHeight
-        return scrollViewBottomOffset
     }
     
 }
